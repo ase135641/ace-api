@@ -2,12 +2,12 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Endpoint für die Temperaturkonvertierung
+
 @app.route('/api/temp', methods=['GET'])
 def convert_temperature():
     celsius_str = request.args.get('celsius')
     if celsius_str is None:
-        return jsonify({'error': 'Celsius parameter is missing'}), 400  # Bad Request
+        return jsonify({'error': 'Celsius parameter is missing'}), 400
 
     try:
         celsius = float(celsius_str)
@@ -18,15 +18,13 @@ def convert_temperature():
         }
         return jsonify(response)
     except ValueError:
-        return jsonify({'error': 'Invalid value for Celsius parameter'}), 400  # Bad Request
+        return jsonify({'error': 'Invalid value for Celsius parameter'}), 400
 
 
-# Endpoint für die Primzahlen
 @app.route('/api/prime', methods=['GET'])
 def generate_primes():
     limit = int(request.args.get('limit'))
-    
-    # Sieb des Eratosthenes Algorithmus
+
     def sieve_eratosthenes(n):
         is_prime = [True] * (n + 1)
         is_prime[0] = is_prime[1] = False
@@ -42,14 +40,13 @@ def generate_primes():
 
     primes = sieve_eratosthenes(limit)
     response = {'primes': primes}
-    return jsonify(response)
+    return jsonify(response), 200, {'Content-Type': 'application/json; charset=utf-8', 'indent': 2}
 
-# Endpoint für die Zahlenfolge
+
 @app.route('/api/number', methods=['GET'])
 def calculate_number():
     n = int(request.args.get('n'))
     
-    # Berechnung der Fibonacci-Zahlen
     def fibonacci(n):
         if n <= 0:
             return 0
